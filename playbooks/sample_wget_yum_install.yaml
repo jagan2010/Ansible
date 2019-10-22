@@ -1,0 +1,9 @@
+---
+- hosts: computeservers
+  vars: 
+      package1: "wget"
+  tasks:
+       - name: Install wget install using yum
+         yum: name={{package1}} state=installed update_cache=true
+         become: true
+  gather_facts: no 

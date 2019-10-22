@@ -1,0 +1,14 @@
+---
+- hosts: [dbservers]
+  vars:
+      package_name: "httpd"
+  tasks:
+     - name: Update Yum package index
+       yum: name=* update_cache=yes
+     - name: Install Apache webserver
+       yum: name={{package_name}} state=installed update_cache=no
+     - name: copy file to webserer
+       copy: src=/tmp/index.html dest=/var/tmp/new/
+     - name: start apache webserver
+       shell: systemctl start httpd chdir=/bin
+  gather_facts: no

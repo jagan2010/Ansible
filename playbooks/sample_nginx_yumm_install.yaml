@@ -1,0 +1,9 @@
+---
+- hosts: computeservers
+  vars:
+     package1: "nginx"
+  tasks:
+    - name: Install nginx package using Yum
+      yum: name=nginx state=installed update_cache=true
+      become: true
+  gather_facts: no 

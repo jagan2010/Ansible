@@ -1,0 +1,8 @@
+---
+- hosts: [dbservers]
+  vars:
+      package_name: "apache2"
+  tasks:
+     - name: Update Yum package index
+       yum: name="*" update_cache=yes
+  gather_facts: no
