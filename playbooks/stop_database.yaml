@@ -1,0 +1,14 @@
+---
+- hosts: [dbservers]
+  vars:
+       component: "crs"
+       db_unique_name: "db1025_bom1r3"
+  tasks:
+      - name: stop database
+        shell: srvctl stop database -d {{db_unique_name}} executable=/bin/bash chdir=/u01/app/oracle/product/12.1.0.2/dbhome_1/bin
+        environment: 
+           ORACLE_HOME: /u01/app/oracle/product/12.1.0.2/dbhome_1
+           PATH: $PATH:/u01/app/oracle/product/12.1.0.2/dbhome_1/bin
+        become: yes
+        become_user: oracle
+  gather_facts: no

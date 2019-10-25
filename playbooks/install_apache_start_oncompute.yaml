@@ -1,0 +1,10 @@
+---
+- hosts: [computeservers]
+  vars: 
+      package_name: "httpd"
+  tasks:
+      - name: Install httpd package-apache server
+        yum: name=httpd state=installed
+      - name: start apache server
+        systemd: name=httpd state=started
+  gather_facts: no

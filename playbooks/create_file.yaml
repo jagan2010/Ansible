@@ -1,0 +1,11 @@
+---
+- hosts: [dbservers]
+  vars:
+       component: "crs"
+       db_unique_name: "db1025_bom1r3"
+  tasks:
+      - name: stop database
+        command: touch a  chdir=/u01/app/oracle/product/12.1.0.2/dbhome_1/bin/
+        become_user: oracle
+        become: yes
+  gather_facts: no
