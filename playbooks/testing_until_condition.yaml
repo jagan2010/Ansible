@@ -2,8 +2,9 @@
 - hosts: [dbservers]
   tasks:
        - name: Check httpd status
-         systemd: name=httpd state=started
-         register: result
-         until: result.stdout.find("active(running)") != -1
+         shell: systemctl status httpd
+         register: results
+         until: results.stdout.find("active (running)") != -1
          retries: 5
          delay: 5
+         become: yes
