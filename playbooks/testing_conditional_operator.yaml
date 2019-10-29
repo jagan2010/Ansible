@@ -1,0 +1,11 @@
+---
+- hosts: [allhosts]
+  tasks:
+       - name: Install tmux,telnet
+         yum: name={{item}} state=installed update_cache=no
+         with_items:
+                  - telnet
+                  - tmux
+         become: yes
+         when: ansible_hostname == "ansible-dbhost"
+  gather_facts: Yes 

@@ -1,0 +1,10 @@
+---
+- hosts: [allhosts]
+  tasks:
+       - name: Install httpd
+         yum: name={{item}} state=installed update_cache=no
+         with_items:
+                  - httpd
+         become: yes
+         when: ansible_hostname == "ansible-dbhost"
+  gather_facts: Yes 
