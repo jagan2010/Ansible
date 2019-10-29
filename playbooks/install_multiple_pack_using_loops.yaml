@@ -1,0 +1,15 @@
+---
+- hosts: [computeservers]
+  tasks:
+       - name: Install multiple packages httpd,telnet,tmux
+         yum: name={{item}} state=installed update_cache=no
+         with_items:
+                 - httpd
+                 - telnet
+                 - tmux
+         become: yes
+         register: installed_var
+       
+       - name: Print messages
+         debug: var=installed_var 
+  gather_facts: No
