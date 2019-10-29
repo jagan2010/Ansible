@@ -1,0 +1,17 @@
+---
+- hosts: [dbservers]
+  vars: 
+      db_unique_name: db1025_bom1r3
+  tasks:
+      - name: Database status
+        shell: srvctl status database -d {{db_unique_name}} chdir=/u01/app/oracle/product/12.1.0.2/dbhome_1/bin
+        become: yes
+        become_user: oracle
+        register: dbstatus
+
+      - name: print status
+        debug: var=dbstatus 
+  environment:
+      - ORACLE_HOME: /u01/app/oracle/product/12.1.0.2/dbhome_1
+      - PATH: $PATH:/usr/bin:/usr/sbin:/usr/local/sbin:/u01/app/oracle/product/12.1.0.2/dbhome_1/bin      
+  gather_facts: No
