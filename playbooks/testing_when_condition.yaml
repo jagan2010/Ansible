@@ -1,0 +1,12 @@
+---
+- hosts: [dbservers]
+  tasks:
+       - name: status httpd server
+         shell: systemctl status httpd
+         register: results
+         become: yes
+
+       - name: start httpd server
+         shell: systemctl start httpd
+         when: results.stdout.find("inactive (dead)") != -1
+         become: yes
