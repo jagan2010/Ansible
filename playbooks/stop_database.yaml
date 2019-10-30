@@ -1,5 +1,6 @@
 ---
-- hosts: [dbservers]
+- name: stop dataabse playbook
+  hosts: [dbservers]
   vars:
        component: "crs"
        db_unique_name: "db1025_bom1r3"
