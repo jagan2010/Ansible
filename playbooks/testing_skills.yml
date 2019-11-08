@@ -1,0 +1,45 @@
+---
+- name: Testing my skills playbook
+  hosts: [dbservers]
+  vars: 
+       package1: "httpd"
+       package2: "telnet"
+       package3: "tmux"
+  tasks:
+      - name:  Pre-steps for rpm install
+        shell: srvctl status database -d db1031_bom15w chdir=/u01/app/oracle/product/12.2.0.1/dbhome_1/bin
+        environment:
+         - ORACLE_HOME: /u01/app/oracle/product/12.2.0.1/dbhome_1
+         - PATH: $PATH:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/u01/app/oracle/product/12.2.0.1/dbhome_1/bin
+        register: result_dbstatus
+        become: yes
+        become_user: oracle
+
+      - name: Stop Database
+        shell: srvctl stop database -d db1031_bom15w chdir=/u01/app/oracle/product/12.2.0.1/dbhome_1/bin
+        environment:
+         - ORACLE_HOME: /u01/app/oracle/product/12.2.0.1/dbhome_1
+         - PATH: $PATH:/usr/bin:/user/sbin:/usr/local/bin:/usr/local/sbin:/u01/app/oracle/product/12.2.0.1/dbhome_1/bin
+        become: yes
+        become_user: oracle
+        when: result_dbstatus.stdout.find("is running") != -1
+
+      - name: Install rpms required
+        yum: name={{item}} state=installed update_cache=no
+        with_items:
+                  - "{{package1}}"
+                  - "{{package2}}"
+                  - "{{package3}}" 
+        become: yes
+        become_user: root
+        when: result_dbstatus.stdout.find("is not running") != -1
+        notify: Start database
+ 
+  handlers:
+      - name: Start database
+        shell: srvctl start database -d db1031_bom15w chdir=/u01/app/oracle/product/12.2.0.1/dbhome_1/bin
+        environment:
+         - ORACLE_HOME: /u01/app/oracle/product/12.2.0.1/dbhome_1
+         - PATH: $PATH:/usr/bin:/user/sbin:/usr/local/bin:/usr/local/sbin:/u01/app/oracle/product/12.2.0.1/dbhome_1/bin
+        become: yes
+        become_user: oracle
